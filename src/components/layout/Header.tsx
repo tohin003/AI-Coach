@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Bell, LogOut, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,11 +17,21 @@ import {
 
 export function Header() {
     const { user, signOut } = useAuth();
+    const pathname = usePathname();
+
+    const getTitle = () => {
+        if (!pathname) return "Dashboard";
+        if (pathname === "/") return "Dashboard";
+        if (pathname.startsWith("/coach")) return "AI Coach";
+        if (pathname.startsWith("/roadmap")) return "Roadmap";
+        if (pathname.startsWith("/resources")) return "Resources";
+        return "Dashboard";
+    };
 
     return (
         <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 shadow-sm">
             <div className="flex items-center">
-                <h1 className="text-xl font-semibold text-slate-800">Dashboard</h1>
+                <h1 className="text-xl font-semibold text-slate-800">{getTitle()}</h1>
             </div>
             <div className="flex items-center space-x-4">
                 <Button variant="ghost" size="icon" className="text-slate-500 hover:text-slate-700">
