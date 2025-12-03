@@ -166,10 +166,18 @@ export default function AnalysisCanvas() {
             const { createClient } = await import("@/lib/supabase");
             const supabase = createClient();
 
-            // 1. Create Submission
+            // 1. Get User
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                toast.error("You must be logged in to save progress");
+                return;
+            }
+
+            // 2. Create Submission
             const { data: submission, error: subError } = await supabase
                 .from("submissions")
                 .insert({
+                    user_id: user.id,
                     code,
                     language,
                     problem_title: result.problem_title || "Custom Problem",
