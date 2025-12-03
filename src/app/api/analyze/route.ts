@@ -17,8 +17,11 @@ const analysisSchema = z.object({
     optimized_approach: z.string().describe("Brief explanation of the optimal approach"),
     optimized_code: z.string().describe("The full optimized code solution"),
     visualization: z.string().describe("Mermaid.js diagram definition. MUST use quoted labels e.g. A['Label']"),
-    suggested_questions: z.array(z.string()).describe("3 conceptual follow-up questions to test understanding"),
-    leetcode_link: z.string().describe("Link to a similar LeetCode problem"),
+    similar_problems: z.array(z.object({
+        name: z.string().describe("Name of the problem"),
+        link: z.string().describe("URL to the problem (LeetCode/HackerRank)"),
+        difficulty: z.string().describe("Difficulty level (Easy/Medium/Hard)")
+    })).describe("List of 3 similar coding problems for practice"),
 });
 
 export async function POST(req: Request) {

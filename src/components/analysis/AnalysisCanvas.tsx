@@ -25,8 +25,11 @@ interface AnalysisResult {
     optimized_approach?: string;
     optimized_code: string;
     visualization: string;
-    suggested_questions?: string[];
-    leetcode_link?: string;
+    similar_problems?: {
+        name: string;
+        link: string;
+        difficulty: string;
+    }[];
 }
 
 interface ChatMessage {
@@ -346,31 +349,33 @@ export default function AnalysisCanvas() {
                                                     </ul>
                                                 </div>
 
-                                                {/* Suggested Questions */}
-                                                {result.suggested_questions && (
+                                                {/* Similar Problems */}
+                                                {result.similar_problems && (
                                                     <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
                                                         <h4 className="mb-3 flex items-center font-semibold text-blue-800">
                                                             <HelpCircle className="mr-2 h-5 w-5" />
-                                                            Challenge Yourself
+                                                            Practice Similar Problems
                                                         </h4>
-                                                        <ul className="space-y-2 mb-4">
-                                                            {result.suggested_questions.map((q, i) => (
-                                                                <li key={i} className="flex items-start text-sm text-blue-700">
-                                                                    <span className="mr-2 mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500" />
-                                                                    {q}
+                                                        <ul className="space-y-3">
+                                                            {result.similar_problems.map((prob, i) => (
+                                                                <li key={i} className="flex items-center justify-between text-sm">
+                                                                    <div className="flex items-center">
+                                                                        <span className="mr-2 mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500" />
+                                                                        <a
+                                                                            href={prob.link}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="font-medium text-blue-700 hover:underline"
+                                                                        >
+                                                                            {prob.name}
+                                                                        </a>
+                                                                    </div>
+                                                                    <Badge variant="outline" className="bg-white text-blue-600 border-blue-200 text-xs">
+                                                                        {prob.difficulty}
+                                                                    </Badge>
                                                                 </li>
                                                             ))}
                                                         </ul>
-                                                        {result.leetcode_link && (
-                                                            <a
-                                                                href={result.leetcode_link}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="inline-flex items-center text-sm font-medium text-blue-600 hover:underline"
-                                                            >
-                                                                Practice Similar Problem <ExternalLink className="ml-1 h-3 w-3" />
-                                                            </a>
-                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -416,8 +421,8 @@ export default function AnalysisCanvas() {
                                                     {chatMessages.map((msg, i) => (
                                                         <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                                             <div className={`max-w-[80%] rounded-lg p-3 text-sm ${msg.role === 'user'
-                                                                    ? 'bg-indigo-600 text-white'
-                                                                    : 'bg-slate-100 text-slate-800'
+                                                                ? 'bg-indigo-600 text-white'
+                                                                : 'bg-slate-100 text-slate-800'
                                                                 }`}>
                                                                 {msg.content}
                                                             </div>
